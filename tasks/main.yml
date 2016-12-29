@@ -1,0 +1,15 @@
+- name: checking id
+  command: id
+  become: false   # disable become so we can get id of the remote user vs id of root
+  register: result
+  changed_when: false
+- name: updating sshd config
+  copy:
+    src: etc/ssh/sshd_config
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: 0644
+  become: true
+  notify: restart sshd
+  when: result.stdout.find('(sshusers)') != -1

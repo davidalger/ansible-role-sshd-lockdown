@@ -1,8 +1,9 @@
 - name: checking id
   command: id
   become: false   # disable become so we can get id of the remote user vs id of root
-  register: result
+  register: check_id_result
   changed_when: false
+
 - name: update sshd config
   copy:
     src: etc/ssh/sshd_config
@@ -12,15 +13,19 @@
     mode: 0644
   become: true
   notify: restart sshd
-  when: result.stdout.find('(sshusers)') != -1    # only run this when sshusers group exists and current user is member
+  # only run this when sshusers group exists and current user is member
+  when: ('stdout' in check_id_result) and (check_id_result.stdout.find('(sshusers)') != -1)
+
 - name: checking for rack user
   command: id rack
-  register: result
+  register: rack_user_result
   changed_when: false
   failed_when: false
+
 - name: add rack user to sshusers
   user:
     name: rack
     groups: sshusers
     append: yes
-  when: result.stdout.find('(rack)') != -1        # only run when rack user exists
+  # only run when rack user exists
+  when: ('stdout' in rack_user_result) and (rack_user_result.stdout.find('(rack)') != -1)

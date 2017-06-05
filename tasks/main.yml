@@ -5,8 +5,8 @@
   changed_when: false
 
 - name: update sshd config
-  copy:
-    src: etc/ssh/sshd_config
+  template:
+    src: sshd_config
     dest: /etc/ssh/sshd_config
     owner: root
     group: root

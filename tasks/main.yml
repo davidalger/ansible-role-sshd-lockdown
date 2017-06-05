@@ -1,6 +1,6 @@
 - name: checking id
   command: id
-  become: false   # disable become so we can get id of the remote user vs id of root
+  become: false   # disable become so check retrieves id of remote user vs id of root
   register: check_id_result
   changed_when: false
 
@@ -13,7 +13,7 @@
     mode: 0644
   become: true
   notify: restart sshd
-  # only run this when sshusers group exists and current user is member
+  # only runs when sshusers group exists and current user is a member of sshusers
   when: ('stdout' in check_id_result) and (check_id_result.stdout.find('(sshusers)') != -1)
 
 - name: checking for rack user
@@ -27,5 +27,5 @@
     name: rack
     groups: sshusers
     append: yes
-  # only run when rack user exists
+  # only runs when rack user exists
   when: ('stdout' in rack_user_result) and (rack_user_result.stdout.find('(rack)') != -1)

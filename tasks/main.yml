@@ -6,7 +6,7 @@
 
 - name: update sshd config
   template:
-    src: sshd_config
+    src: "{{ sshd_lockdown_config_template }}"
     dest: /etc/ssh/sshd_config
     owner: root
     group: root

@@ -140,3 +140,6 @@ Subsystem	sftp	/usr/libexec/openssh/sftp-server
 #	X11Forwarding no
 #	AllowTcpForwarding no
 #	ForceCommand cvs server
+{% if sshd_additional_config|default(false) %}{% for item in sshd_additional_config_lines %}
+{{ item }}
+{% endfor %}{% endif %}

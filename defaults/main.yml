@@ -2,3 +2,4 @@
 sshd_lockdown_config_template: sshd_config
 sshd_additional_config: false
 sshd_additional_config_lines: []
+sshd_sftp_subsystem: /usr/libexec/openssh/sftp-server

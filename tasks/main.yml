@@ -1,8 +1,33 @@
 - name: checking id
   command: id
   become: false   # disable become so check retrieves id of remote user vs id of root
+  check_mode: no  # disable check_mode since this is neccessary to check remainder of playbook
   register: check_id_result
   changed_when: false
+
+- name: checking for rack user
+  command: id rack
+  register: rack_user_result
+  check_mode: no  # disable check_mode since this is neccessary to check remainder of playbook
+  changed_when: false
+  failed_when: false
+
+- block:
+  - name: add rack user to sshusers
+    user:
+      name: rack
+      groups: sshusers
+      append: yes
+  - set_fact:
+      sshd_config_chunk_match_rack_user:
+        - "Match user rack"
+        - "  PasswordAuthentication yes"
+  - name: add exception allowing rack user to use pw auth
+    set_fact:
+      sshd_additional_config_lines: # merge two arrays together into one array including the match rack rule
+        "{{ sshd_additional_config_lines|default([]) }} + {{ sshd_config_chunk_match_rack_user }}"
+  # only run this block when rack user exists
+  when: ('stdout' in rack_user_result) and (rack_user_result.stdout.find('(rack)') != -1)
 
 - name: update sshd config
   template:
@@ -15,17 +40,3 @@
   notify: restart sshd
   # only runs when sshusers group exists and current user is a member of sshusers
   when: ('stdout' in check_id_result) and (check_id_result.stdout.find('(sshusers)') != -1)
-
-- name: checking for rack user
-  command: id rack
-  register: rack_user_result
-  changed_when: false
-  failed_when: false
-
-- name: add rack user to sshusers
-  user:
-    name: rack
-    groups: sshusers
-    append: yes
-  # only runs when rack user exists
-  when: ('stdout' in rack_user_result) and (rack_user_result.stdout.find('(rack)') != -1)

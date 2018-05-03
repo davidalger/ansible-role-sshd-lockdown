@@ -140,6 +140,6 @@ Subsystem	sftp	{{ sshd_sftp_subsystem }}
 #	AllowTcpForwarding no
 #	PermitTTY no
 #	ForceCommand cvs server
-{% if sshd_additional_config|default(false) %}{% for item in sshd_additional_config_lines %}
+{% for item in sshd_additional_config_lines %}
 {{ item }}
-{% endfor %}{% endif %}
+{% endfor -%}

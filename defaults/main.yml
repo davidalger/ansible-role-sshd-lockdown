@@ -2,3 +2,6 @@
 sshd_lockdown_config_template: sshd_config
 sshd_additional_config_lines: []
 sshd_sftp_subsystem: /usr/libexec/openssh/sftp-server
+
+# internal flag to prevent Match rule from being added twice when role is used more than once in a single playbook
+sshd_config_chunk_match_rack_user_merged: false

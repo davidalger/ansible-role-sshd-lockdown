@@ -20,18 +20,16 @@
       append: yes
   - set_fact:
       sshd_config_chunk_match_rack_user:
-        - "Match user rack"
+        - "\nMatch user rack"
         - "  PasswordAuthentication yes"
   - name: add exception allowing rack user to use pw auth
     set_fact:
       sshd_additional_config_lines: # merge two arrays together into one array including the match rack rule
         "{{ sshd_additional_config_lines|default([]) }} + {{ sshd_config_chunk_match_rack_user }}"
       sshd_config_chunk_match_rack_user_merged: true
-  # only run this block when rack user exists and we have not already added the match rule
-  when:
-    - ('stdout' in rack_user_result)
-    - rack_user_result.stdout.find('(rack)') != -1
-    - sshd_config_chunk_match_rack_user_merged != false
+    when: not sshd_config_chunk_match_rack_user_merged
+  # only run this block when rack user exists
+  when: ('stdout' in rack_user_result) and (rack_user_result.stdout.find('(rack)') != -1)
 
 - name: update sshd config
   template:

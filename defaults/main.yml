@@ -1,5 +1,7 @@
 ---
 sshd_lockdown_config_template: sshd_config
+sshd_client_alive_interval: 60
+sshd_client_alive_count_max: 5
 sshd_additional_config_lines: []
 sshd_sftp_subsystem: /usr/libexec/openssh/sftp-server
 

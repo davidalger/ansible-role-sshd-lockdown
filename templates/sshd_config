@@ -41,7 +41,7 @@ PermitRootLogin no
 #StrictModes yes
 #MaxAuthTries 6
 #MaxSessions 10
-AllowGroups sshusers
+AllowGroups {{ sshd_access_group }}
 
 #PubkeyAuthentication yes
 

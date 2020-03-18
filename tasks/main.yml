@@ -1,3 +1,6 @@
+- name: "create sshd_access_group: {{ sshd_access_group }} group"
+  group: "{{ sshd_access_group }}"
+
 - name: checking id
   command: id
   become: false   # disable become so check retrieves id of remote user vs id of root
@@ -5,31 +8,32 @@
   register: check_id_result
   changed_when: false
 
-- name: checking for rack user
-  command: id rack
-  register: rack_user_result
+- name: "checking for {{ sshd_pass_auth_exception_user }} user"
+  command: "id {{ sshd_pass_auth_exception_user }}"
+  register: pass_except_user_result
   check_mode: no  # disable check_mode since this is neccessary to check remainder of playbook
   changed_when: false
   failed_when: false
+  when: sshd_pass_auth_exception
 
 - block:
-  - name: add rack user to sshusers
+  - name: "add {{ sshd_pass_auth_exception_user }} user to ssh access group"
     user:
-      name: rack
-      groups: sshusers
+      name: "{{ sshd_pass_auth_exception_user }}"
+      groups: "{{ sshd_access_group }}"
       append: yes
   - set_fact:
-      sshd_config_chunk_match_rack_user:
-        - "\nMatch user rack"
+      sshd_config_chunk_match_pass_except_user:
+        - "\nMatch user {{ sshd_pass_auth_exception_user }}"
         - "  PasswordAuthentication yes"
-  - name: add exception allowing rack user to use pw auth
+  - name: "add exception allowing {{ sshd_pass_auth_exception_user }} user to use pw auth"
     set_fact:
-      sshd_additional_config_lines: # merge two arrays together into one array including the match rack rule
-        "{{ sshd_additional_config_lines|default([]) }} + {{ sshd_config_chunk_match_rack_user }}"
-      sshd_config_chunk_match_rack_user_merged: true
-    when: not sshd_config_chunk_match_rack_user_merged
-  # only run this block when rack user exists
-  when: ('stdout' in rack_user_result) and (rack_user_result.stdout.find('(rack)') != -1)
+      sshd_additional_config_lines: # merge two arrays together into one array including the match pass_except rule
+        "{{ sshd_additional_config_lines|default([]) }} + {{ sshd_config_chunk_match_pass_except_user }}"
+      sshd_config_chunk_match_pass_except_user_merged: true
+    when: not sshd_config_chunk_match_pass_except_user_merged
+  # only run this block when sshd_pass_auth_exception_user user exists
+  when: ('stdout' in pass_except_user_result) and (pass_except_user_result.stdout.find(sshd_pass_auth_exception_user) != -1)
 
 - name: update sshd config
   template:
@@ -40,5 +44,5 @@
     mode: 0644
   become: true
   notify: restart sshd
-  # only runs when sshusers group exists and current user is a member of sshusers
-  when: ('stdout' in check_id_result) and (check_id_result.stdout.find('(sshusers)') != -1)
+  # only runs when ssh access group exists and current user is a member of ssh access group
+  when: ('stdout' in check_id_result) and (check_id_result.stdout.find(sshd_access_group) != -1)

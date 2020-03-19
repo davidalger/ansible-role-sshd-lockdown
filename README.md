@@ -4,6 +4,10 @@ Replaces SSHD config file with template on RHEL / CentOS 7.
 
 This role replaces the sshd config using a template file and ansible variables. The defaults provide a locked down sshd config where password authentication is disabled for SSH users, and users must be a part of the `sshusers` group in order to be granted the ability to connect and authenticate over SSH. 
 
+## TODO
+
+Research https://www.ssh.com/ssh/sshd_config
+
 ## Requirements
 
 None.

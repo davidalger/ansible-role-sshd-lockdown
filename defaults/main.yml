@@ -9,6 +9,9 @@ sshd_access_group: sshusers
 sshd_pass_auth_exception: false
 sshd_pass_auth_exception_user: legacy_admin
 
+sshd_config_loglevel: VERBOSE
+sshd_config_allowgroups: "{{ sshd_access_group }}"
+sshd_config_pubkeyauthentication: "yes"
 
 # internal flag to prevent Match rule from being added twice when role is used more than once in a single playbook
 sshd_config_chunk_match_pass_except_user_merged: false

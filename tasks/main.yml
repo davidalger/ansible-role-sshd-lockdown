@@ -1,5 +1,6 @@
 - name: "create sshd_access_group: {{ sshd_access_group }} group"
-  group: "{{ sshd_access_group }}"
+  group:
+    name: "{{ sshd_access_group }}"
 
 - name: checking id
   command: id

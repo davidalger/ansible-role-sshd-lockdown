@@ -26,6 +26,11 @@ None.
       vars:
         sshd_pass_auth_exception: true
         sshd_pass_auth_exception_user: rack
+        
+        sshd_access_users:
+          - someotheruser
+          - another_user
+          - unprivileged_ssh_suer
       roles:
         - { role: classyllama.sshd-lockdown }
 

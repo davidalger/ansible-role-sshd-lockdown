@@ -5,6 +5,7 @@ sshd_client_alive_count_max: 5
 sshd_additional_config_lines: []
 sshd_sftp_subsystem: /usr/libexec/openssh/sftp-server
 sshd_access_group: sshusers
+sshd_access_users: []
 
 sshd_pass_auth_exception: false
 sshd_pass_auth_exception_user: legacy_admin

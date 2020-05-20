@@ -25,22 +25,24 @@
   failed_when: false
   when: sshd_pass_auth_exception
 
-- block:
-  - name: add {{ sshd_pass_auth_exception_user }} user to ssh access group
-    user:
-      name: "{{ sshd_pass_auth_exception_user }}"
-      groups: "{{ sshd_access_group }}"
-      append: yes
-  - set_fact:
-      sshd_config_chunk_match_pass_except_user:
-        - "\nMatch user {{ sshd_pass_auth_exception_user }}"
-        - "  PasswordAuthentication yes"
-  - name: "add exception allowing {{ sshd_pass_auth_exception_user }} user to use pw auth"
-    set_fact:
-      sshd_additional_config_lines: # merge two arrays together into one array including the match pass_except rule
-        "{{ sshd_additional_config_lines|default([]) }} + {{ sshd_config_chunk_match_pass_except_user }}"
-      sshd_config_chunk_match_pass_except_user_merged: true
-    when: not sshd_config_chunk_match_pass_except_user_merged
+- name: process sshd config exception for legacy admin user
+  block:
+    - name: add {{ sshd_pass_auth_exception_user }} user to ssh access group
+      user:
+        name: "{{ sshd_pass_auth_exception_user }}"
+        groups: "{{ sshd_access_group }}"
+        append: true
+    - name: set internal fact used to merge config in next step
+      set_fact:
+        sshd_config_chunk_match_pass_except_user:
+          - "\nMatch user {{ sshd_pass_auth_exception_user }}"
+          - "  PasswordAuthentication yes"
+    - name: add exception allowing {{ sshd_pass_auth_exception_user }} user to use pw auth
+      set_fact:
+        sshd_additional_config_lines:   # merge two arrays together into one array including the match pass_except rule
+          "{{ sshd_additional_config_lines|default([]) }} + {{ sshd_config_chunk_match_pass_except_user }}"
+        sshd_config_chunk_match_pass_except_user_merged: true
+      when: not sshd_config_chunk_match_pass_except_user_merged
   # only run this block when sshd_pass_auth_exception_user user exists
   when: ('stdout' in pass_except_user_result) and (pass_except_user_result.stdout.find(sshd_pass_auth_exception_user) != -1)
 

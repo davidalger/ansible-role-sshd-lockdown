@@ -15,6 +15,9 @@ sshd_client_alive_interval: 60
 # default value of '5' * '60' seconds (sshd_client_alive_interval) == 5 minute wait to terminate the connection.
 sshd_client_alive_count_max: 5
 
+# Disable GSSAPIAuthentication by default as it is rarely used and increases the attack service of the system.
+sshd_gssapi_authentication: "no"
+
 sshd_sftp_subsystem: /usr/libexec/openssh/sftp-server
 
 sshd_additional_config_lines: []

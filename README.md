@@ -6,6 +6,7 @@ Replaces sshd config on EL 7 with a secured sshd config template which adheres t
 
 * `PermitRootLogin` is disabled.
 * `PasswordAuthentication` is disabled.
+* `GSSAPIAuthentication` is disabled.
 * `sshusers` group is added and `sshd` configured such that only members of this group will be authorized.
 
 ## Requirements

@@ -4,7 +4,7 @@ dependencies: []
 galaxy_info:
   role_name: sshd_lockdown
   author: David Alger
-  description: Installs secured sshd config on CentOS/RHEL
+  description: Replaces sshd config on EL 7 with a secured sshd config template
   license: MIT
   min_ansible_version: 2.4
 
@@ -12,7 +12,6 @@ galaxy_info:
     - name: EL
       versions:
         - 7
-        - 6
 
   galaxy_tags:
     - system

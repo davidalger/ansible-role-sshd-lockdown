@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/davidalger/ansible-role-sshd-lockdown.svg?branch=master)](https://travis-ci.org/davidalger/ansible-role-sshd-lockdown)
 
-Replaces sshd config on CentOS / RHEL with a locked down sshd config including the following practices:
+Replaces sshd config on EL 7 with a secured sshd config template which adheres to the following practices:
 
 * `PermitRootLogin` is disabled.
 * `PasswordAuthentication` is disabled.

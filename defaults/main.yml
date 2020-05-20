@@ -1,11 +1,19 @@
 ---
+# Set this to specify a custom sshd configuration template
 sshd_lockdown_config_template: sshd_config
+
+# This group will be created and sshd configured to only allow members of this group to authenticate
+sshd_access_group: sshusers
+
+# List of users to add to the sshd_access_group (sshusers) group as defined above
+sshd_access_users: []
+
 sshd_client_alive_interval: 60
 sshd_client_alive_count_max: 5
-sshd_additional_config_lines: []
+
 sshd_sftp_subsystem: /usr/libexec/openssh/sftp-server
-sshd_access_group: sshusers
-sshd_access_users: []
+
+sshd_additional_config_lines: []
 
 sshd_pass_auth_exception: false
 sshd_pass_auth_exception_user: legacy_admin

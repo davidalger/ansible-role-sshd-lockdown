@@ -2,18 +2,11 @@
 
 [![Build Status](https://travis-ci.org/davidalger/ansible-role-sshd-lockdown.svg?branch=master)](https://travis-ci.org/davidalger/ansible-role-sshd-lockdown)
 
-Replaces sshd config on CentOS / RHEL. This includes the following (review included configuration template for complete details)
-
-This role replaces the sshd config using a template file and ansible variables. The defaults provide a locked down sshd config where password authentication is disabled for SSH users, and users must be a part of the `sshusers` group in order to be granted the ability to connect and authenticate over SSH. 
+Replaces sshd config on CentOS / RHEL with a locked down sshd config including the following practices:
 
 * `PermitRootLogin` is disabled.
 * `PasswordAuthentication` is disabled.
-* An `sshusers` group is added and `sshd` configured such that only members of this group will be authorized.
-* For use on servers managed by Rackspace, the `rack` user is detected and added to the `sshusers` group if present.
-
-## TODO
-
-Research https://www.ssh.com/ssh/sshd_config
+* `sshusers` group is added and `sshd` configured such that only members of this group will be authorized.
 
 ## Requirements
 
@@ -33,6 +26,13 @@ Add lines of additional custom config to `sshd` service.
 
 Variable for specifying alternate subsystem for use with sftp.
 
+    sshd_access_users:
+      - someotheruser
+      - another_user
+      - unprivileged_ssh_suer
+
+List of users added to the `sshusers` group for access to the system.
+
 ## Dependencies
 
 None.
@@ -43,15 +43,15 @@ None.
       roles:
         - { role: davidalger.sshd_lockdown }
 
+## Example Playbook with Legacy Admin
+
+For use on servers managed by Rackspace, the legacy `rack` user must be detected and added to the `sshusers` group and allowed an exception allowing it to use password authentication.
+
     - hosts: all
       vars:
         sshd_pass_auth_exception: true
         sshd_pass_auth_exception_user: rack
 
-        sshd_access_users:
-          - someotheruser
-          - another_user
-          - unprivileged_ssh_suer
       roles:
         - { role: davidalger.sshd-lockdown }
 

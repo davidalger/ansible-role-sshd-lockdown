@@ -11,7 +11,7 @@
     name: "{{ sshd_access_group }}"
     system: true
 
-- name: add users in sshd_access_users list {{ sshd_access_group }} group
+- name: add users in sshd_access_users list to {{ sshd_access_group }} group
   include_tasks: sshd_user_access.yml
   vars:
     sshd_access_user: "{{ item }}"
@@ -26,7 +26,7 @@
   failed_when: false
   when: sshd_pass_auth_exception
 
-- name: process sshd config exception for legacy admin user
+- name: process sshd config exception for {{ sshd_pass_auth_exception_user }} user
   block:
     - name: add {{ sshd_pass_auth_exception_user }} user to ssh access group
       user:
@@ -45,7 +45,9 @@
         sshd_config_chunk_match_pass_except_user_merged: true
       when: not sshd_config_chunk_match_pass_except_user_merged
   # only run this block when sshd_pass_auth_exception_user user exists
-  when: ('stdout' in pass_except_user_result) and (pass_except_user_result.stdout.find(sshd_pass_auth_exception_user) != -1)
+  when:
+    - ('stdout' in pass_except_user_result)
+    - (pass_except_user_result.stdout.find(sshd_pass_auth_exception_user) != -1)
 
 - name: update sshd config
   template:

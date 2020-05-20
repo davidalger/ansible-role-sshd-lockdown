@@ -39,7 +39,7 @@ None.
 
 ## Example Playbook
 
-    - hosts: web-servers
+    - hosts: all
       roles:
         - { role: davidalger.sshd_lockdown }
 
@@ -53,7 +53,7 @@ For use on servers managed by Rackspace, the legacy `rack` user must be detected
         sshd_pass_auth_exception_user: rack
 
       roles:
-        - { role: davidalger.sshd-lockdown }
+        - { role: davidalger.sshd_lockdown }
 
 ## License
 

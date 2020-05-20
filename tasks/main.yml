@@ -12,8 +12,8 @@
   when: ( sshd_access_users | default([]) ) | length > 0
 
 - name: checking id
-  command: id
-  become: false   # disable become so check retrieves id of remote user vs id of root
+  shell: id $(id -u)  # check id of $(id -u) in order to read from groups file rather than current session
+  become: false   # disable become so check retrieves id of connecting user vs id of root
   check_mode: false  # disable check_mode since this is necessary to check remainder of playbook
   register: check_id_result
   changed_when: false

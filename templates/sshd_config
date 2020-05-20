@@ -32,7 +32,7 @@ HostKey /etc/ssh/ssh_host_ed25519_key
 # Logging
 #SyslogFacility AUTH
 SyslogFacility AUTHPRIV
-#LogLevel INFO
+LogLevel {{ sshd_config_loglevel }}
 
 # Authentication:
 
@@ -41,9 +41,9 @@ PermitRootLogin no
 #StrictModes yes
 #MaxAuthTries 6
 #MaxSessions 10
-AllowGroups sshusers
+AllowGroups {{ sshd_config_allowgroups }}
 
-#PubkeyAuthentication yes
+PubkeyAuthentication {{ sshd_config_pubkeyauthentication }}
 
 # The default is to check both .ssh/authorized_keys and .ssh/authorized_keys2
 # but this is overridden so installations will only check .ssh/authorized_keys
@@ -112,8 +112,8 @@ X11Forwarding yes
 #UsePrivilegeSeparation sandbox
 #PermitUserEnvironment no
 #Compression delayed
-#ClientAliveInterval 0
-#ClientAliveCountMax 3
+ClientAliveInterval {{ sshd_client_alive_interval }}  # Every minute confirm the client is still active
+ClientAliveCountMax {{ sshd_client_alive_count_max }}   # After 5 minutes of no responses back from ClientAliveInterval terminate the connection
 #ShowPatchLevel no
 #UseDNS yes
 #PidFile /var/run/sshd.pid

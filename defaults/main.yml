@@ -18,7 +18,10 @@ sshd_additional_config_lines: []
 sshd_pass_auth_exception: false
 sshd_pass_auth_exception_user: legacy_admin
 
-sshd_config_loglevel: VERBOSE
+# On legacy environments it is strongly recommended that LogLevel be set to VERBOSE to ensure the key fingerprint
+# for any SSH key used for login is logged. Newer versions of OpenSSH will log this information with INFO level.
+sshd_config_loglevel: INFO
+
 sshd_config_allowgroups: "{{ sshd_access_group }}"
 sshd_config_pubkeyauthentication: "yes"
 

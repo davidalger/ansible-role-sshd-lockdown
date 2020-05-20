@@ -9,6 +9,7 @@
 - name: create {{ sshd_access_group }} group
   group:
     name: "{{ sshd_access_group }}"
+    system: true
 
 - name: add users in sshd_access_users list {{ sshd_access_group }} group
   include_tasks: sshd_user_access.yml

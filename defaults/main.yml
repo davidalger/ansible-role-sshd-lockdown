@@ -8,7 +8,11 @@ sshd_access_group: sshusers
 # List of users to add to the sshd_access_group (sshusers) group as defined above
 sshd_access_users: []
 
+# number of seconds that the server will wait before sending a null packet to the client (to keep the connection alive).
 sshd_client_alive_interval: 60
+
+# number of client alive messages which may be sent without sshd(8) receiving any messages back from the client.
+# default value of '5' * '60' seconds (sshd_client_alive_interval) == 5 minute wait to terminate the connection.
 sshd_client_alive_count_max: 5
 
 sshd_sftp_subsystem: /usr/libexec/openssh/sftp-server

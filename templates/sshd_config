@@ -112,8 +112,8 @@ X11Forwarding yes
 #UsePrivilegeSeparation sandbox
 #PermitUserEnvironment no
 #Compression delayed
-ClientAliveInterval {{ sshd_client_alive_interval }}  # Every minute confirm the client is still active
-ClientAliveCountMax {{ sshd_client_alive_count_max }}   # After 5 minutes of no responses back from ClientAliveInterval terminate the connection
+ClientAliveInterval {{ sshd_client_alive_interval }}
+ClientAliveCountMax {{ sshd_client_alive_count_max }}
 #ShowPatchLevel no
 #UseDNS yes
 #PidFile /var/run/sshd.pid

@@ -1,11 +1,4 @@
 ---
-- name: checking id
-  command: id
-  become: false   # disable become so check retrieves id of remote user vs id of root
-  check_mode: false  # disable check_mode since this is necessary to check remainder of playbook
-  register: check_id_result
-  changed_when: false
-
 - name: create {{ sshd_access_group }} group
   group:
     name: "{{ sshd_access_group }}"
@@ -17,6 +10,13 @@
     sshd_access_user: "{{ item }}"
   with_items: "{{ sshd_access_users }}"
   when: ( sshd_access_users | default([]) ) | length > 0
+
+- name: checking id
+  command: id
+  become: false   # disable become so check retrieves id of remote user vs id of root
+  check_mode: false  # disable check_mode since this is necessary to check remainder of playbook
+  register: check_id_result
+  changed_when: false
 
 - name: checking for {{ sshd_pass_auth_exception_user }} user
   command: "id {{ sshd_pass_auth_exception_user }}"

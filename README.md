@@ -1,6 +1,6 @@
 # Ansible Role: sshd-lockdown
 
-[![Build Status](https://travis-ci.org/davidalger/ansible-role-sshd-lockdown.svg?branch=master)](https://travis-ci.org/davidalger/ansible-role-sshd-lockdown)
+[![Build Status](https://travis-ci.com/davidalger/ansible-role-sshd-lockdown.svg?branch=master)](https://travis-ci.com/davidalger/ansible-role-sshd-lockdown)
 
 Replaces sshd config on EL 7 with a secured sshd config template which adheres to the following practices:
 
